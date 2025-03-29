@@ -3,6 +3,8 @@ import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -32,18 +34,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 

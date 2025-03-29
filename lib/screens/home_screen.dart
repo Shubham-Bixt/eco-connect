@@ -281,3 +281,285 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
+
+
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// import 'package:flutter/material.dart';
+// import 'profile_screen.dart'; // Import ProfileScreen
+// import 'events.dart'; // Import EventsScreen
+// import 'chatBot.dart'; // Add this import for the ChatBot screen
+//
+// class HomeScreen extends StatefulWidget {
+//   @override
+//   _HomeScreenState createState() => _HomeScreenState();
+// }
+//
+// class _HomeScreenState extends State<HomeScreen> {
+//   int _selectedIndex = 0;
+//
+//   void _onItemTapped(int index) {
+//     if (index == 3) { // Navigate to Profile
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(builder: (context) => ChatBotInterface()),
+//       );
+//     } else {
+//       setState(() {
+//         _selectedIndex = index;
+//       });
+//     }
+//   }
+//
+//   void _onServiceItemTapped(String label) {
+//     if (label == 'Events') {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(builder: (context) => EcoConnectHomePage()),
+//       );
+//     } else if (label == 'Profile') {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(builder: (context) => ProfileScreen()),
+//       );
+//     } else if (label == 'Map' || label == 'On Demand Pickup' || label == 'Payment') {
+//       _showUnderMaintenanceAlert();
+//     } else {
+//       print('$label clicked');
+//     }
+//   }
+//
+//   void _showUnderMaintenanceAlert() {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: Text('Notice'),
+//           content: Text('This feature is currently under maintenance.'),
+//           actions: [
+//             TextButton(
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//               },
+//               child: Text('OK'),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Color(0xFFF5F5F5),
+//       body: SafeArea(
+//         child: Column(
+//           children: [
+//             Container(
+//               height: 250,
+//               width: double.infinity,
+//               decoration: BoxDecoration(
+//                 color: Colors.grey[300],
+//               ),
+//               child: Stack(
+//                 children: [
+//                   Image.asset(
+//                     'assets/map.jpg',
+//                     width: double.infinity,
+//                     height: 250,
+//                     fit: BoxFit.cover,
+//                   ),
+//                   Padding(
+//                     padding: const EdgeInsets.all(16.0),
+//                     child: Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         Row(
+//                           children: [
+//                             CircleAvatar(
+//                               radius: 18,
+//                               backgroundColor: Colors.white,
+//                               child: Icon(
+//                                 Icons.menu,
+//                                 color: Color(0xFF4D8D6E),
+//                               ),
+//                             ),
+//                             SizedBox(width: 12),
+//                             Text(
+//                               'Eco Connect',
+//                               style: TextStyle(
+//                                 color: Colors.white,
+//                                 fontWeight: FontWeight.bold,
+//                                 fontSize: 18,
+//                                 shadows: [
+//                                   Shadow(
+//                                     blurRadius: 4,
+//                                     color: Colors.black.withOpacity(0.3),
+//                                     offset: Offset(1, 1),
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         Row(
+//                           children: [
+//                             CircleAvatar(
+//                               radius: 18,
+//                               backgroundColor: Colors.white,
+//                               child: Icon(
+//                                 Icons.search,
+//                                 color: Color(0xFF4D8D6E),
+//                               ),
+//                             ),
+//                             SizedBox(width: 12),
+//                             CircleAvatar(
+//                               radius: 18,
+//                               backgroundColor: Colors.white,
+//                               child: Icon(
+//                                 Icons.notifications_none,
+//                                 color: Color(0xFF4D8D6E),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//
+//             SizedBox(height: 10),
+//
+//             Container(
+//               width: double.infinity,
+//               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'Hello',
+//                     style: TextStyle(
+//                       color: Color(0xFF4D8D6E),
+//                       fontSize: 30,
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   ),
+//                   Text(
+//                     'What can we do for you?',
+//                     style: TextStyle(
+//                       color: Color(0xFF4D8D6E),
+//                       fontSize: 21,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//
+//             SizedBox(height: 5),
+//
+//             Expanded(
+//               child: Container(
+//                 margin: EdgeInsets.all(16),
+//                 padding: EdgeInsets.all(16),
+//                 decoration: BoxDecoration(
+//                   color: Colors.white,
+//                   borderRadius: BorderRadius.circular(12),
+//                   boxShadow: [
+//                     BoxShadow(
+//                       color: Colors.black.withOpacity(0.1),
+//                       blurRadius: 8,
+//                       offset: Offset(0, 2),
+//                     ),
+//                   ],
+//                 ),
+//                 child: Column(
+//                   children: [
+//                     Expanded(
+//                       child: GridView.count(
+//                         crossAxisCount: 3,
+//                         mainAxisSpacing: 16,
+//                         crossAxisSpacing: 16,
+//                         physics: NeverScrollableScrollPhysics(),
+//                         children: [
+//                           _buildServiceItem(Icons.location_pin, 'Map'),
+//                           _buildServiceItem(Icons.event, 'Events'),
+//                           _buildServiceItem(Icons.local_shipping, 'On Demand Pickup'),
+//                           _buildServiceItem(Icons.help_outline, 'FAQ'),
+//                           _buildServiceItem(Icons.credit_card, 'Payment'),
+//                           _buildServiceItem(Icons.person, 'Profile'),
+//                         ],
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildServiceItem(IconData icon, String label) {
+//     return GestureDetector(
+//       onTap: () => _onServiceItemTapped(label),
+//       child: Column(
+//         children: [
+//           Container(
+//             padding: EdgeInsets.all(12),
+//             decoration: BoxDecoration(
+//               color: Colors.white,
+//               borderRadius: BorderRadius.circular(8),
+//               border: Border.all(
+//                 color: Colors.grey.withOpacity(0.2),
+//               ),
+//             ),
+//             child: Icon(
+//               icon,
+//               color: Colors.black,
+//               size: 24,
+//             ),
+//           ),
+//           SizedBox(height: 8),
+//           Text(
+//             label,
+//             style: TextStyle(
+//               fontSize: 12,
+//               color: Colors.grey[600],
+//             ),
+//             textAlign: TextAlign.center,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
