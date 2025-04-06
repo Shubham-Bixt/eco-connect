@@ -383,22 +383,7 @@ class _WasteDictionaryState extends State<WasteDictionary> {
           ]
         }
     ),
-    WasteItem(
-        name: 'Tetra Pak Cartons',
-        icon: 'assets/images/tetra_pak.png',
-        category: 'Composite',
-        isRecyclable: true,
-        isOrganic: false,
-        details: {
-          'Composition and recycling': [
-            'Made of multiple layers (paper, aluminum, polyethylene)',
-            'Increasingly accepted in recycling programs',
-            'Should be rinsed and flattened before recycling',
-            'Can be recycled into paper products, building materials, and other items',
-            'Check local guidelines as acceptance varies by region'
-          ]
-        }
-    ),
+
     WasteItem(
         name: 'Tetra Pak Cartons',
         icon: 'assets/images/tetra_pak.png',
@@ -588,7 +573,12 @@ class _WasteDictionaryState extends State<WasteDictionary> {
           // Navigate to the appropriate screen based on the tapped item
           if (index == 0) {
             // Home icon
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+                  (route) => false, // This removes all previous routes
+            );
+
           } else if (index == 1 || index == 3) {
             // Map or Profile icon
             // Already on Profile screen if index is 3

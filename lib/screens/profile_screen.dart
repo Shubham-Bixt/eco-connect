@@ -1,488 +1,4 @@
-// import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'dart:io';
-// import 'signup_screen.dart';
-// import 'package:eco/screens/past_event.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-//
-// class ProfileScreen extends StatefulWidget {
-//   @override
-//   _ProfileScreenState createState() => _ProfileScreenState();
-// }
-//
-// class _ProfileScreenState extends State<ProfileScreen> {
-//   int _selectedIndex = 3; // Profile tab should be selected by default
-//   File? _profileImage;
-//   String? _googleProfileImageUrl;
-//   final ImagePicker _picker = ImagePicker();
-//
-//   // User information
-//   String _userName = "Eco Connect"; // Default value
-//   String _userEmail = "ecoconnect@gmail.com"; // Default value
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     // Load user information
-//     _loadUserInfo();
-//     // Check if user is signed in with Google
-//     _checkGoogleSignIn();
-//   }
-//
-//   Future<void> _loadUserInfo() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     setState(() {
-//       _userName = prefs.getString('user_name') ?? _userName;
-//       _userEmail = prefs.getString('user_email') ?? _userEmail;
-//     });
-//   }
-//
-//   Future<void> _checkGoogleSignIn() async {
-//     final GoogleSignIn googleSignIn = GoogleSignIn();
-//     try {
-//       final GoogleSignInAccount? account = await googleSignIn.signInSilently();
-//       if (account != null) {
-//         setState(() {
-//           _googleProfileImageUrl = account.photoUrl;
-//           _userName = account.displayName ?? _userName;
-//           _userEmail = account.email;
-//
-//           // Save user info to SharedPreferences
-//           _saveUserInfo(account.displayName, account.email);
-//         });
-//       }
-//     } catch (e) {
-//       print('Error checking Google sign-in: $e');
-//     }
-//   }
-//
-//   Future<void> _saveUserInfo(String? name, String email) async {
-//     if (name == null) return;
-//
-//     final prefs = await SharedPreferences.getInstance();
-//     await prefs.setString('user_name', name);
-//     await prefs.setString('user_email', email);
-//   }
-//
-//   Future<void> _pickImage(ImageSource source) async {
-//     try {
-//       final XFile? pickedFile = await _picker.pickImage(source: source);
-//
-//       if (pickedFile != null) {
-//         setState(() {
-//           _profileImage = File(pickedFile.path);
-//           // Clear Google profile image when user selects their own
-//           _googleProfileImageUrl = null;
-//         });
-//       }
-//     } catch (e) {
-//       print('Error picking image: $e');
-//     }
-//   }
-//
-//   void _showImageSourceDialog() {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: Text('Select Profile Picture'),
-//           content: SingleChildScrollView(
-//             child: ListBody(
-//               children: <Widget>[
-//                 GestureDetector(
-//                   child: ListTile(
-//                     leading: Icon(Icons.photo_library, color: Color(0xFF4D8D6E)),
-//                     title: Text('Choose from Gallery'),
-//                   ),
-//                   onTap: () {
-//                     Navigator.pop(context);
-//                     _pickImage(ImageSource.gallery);
-//                   },
-//                 ),
-//                 GestureDetector(
-//                   child: ListTile(
-//                     leading: Icon(Icons.camera_alt, color: Color(0xFF4D8D6E)),
-//                     title: Text('Take a Photo'),
-//                   ),
-//                   onTap: () {
-//                     Navigator.pop(context);
-//                     _pickImage(ImageSource.camera);
-//                   },
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-//
-//   Widget _buildProfileImage() {
-//     if (_profileImage != null) {
-//       // Use locally selected image
-//       return CircleAvatar(
-//         radius: 60,
-//         backgroundImage: FileImage(_profileImage!),
-//       );
-//     } else if (_googleProfileImageUrl != null) {
-//       // Use Google profile image
-//       return CircleAvatar(
-//         radius: 60,
-//         backgroundImage: NetworkImage(_googleProfileImageUrl!),
-//         onBackgroundImageError: (exception, stackTrace) {
-//           // This callback doesn't expect a return value
-//           print('Error loading profile image: $exception');
-//         },
-//         child: null, // We'll handle fallback in a different way
-//       );
-//     } else {
-//       // Use initials as fallback
-//       return _buildInitialsAvatar();
-//     }
-//   }
-//
-//   Widget _buildInitialsAvatar() {
-//     // Get initials from user name
-//     String initials = _userName
-//         .split(' ')
-//         .map((name) => name.isNotEmpty ? name[0] : '')
-//         .join('')
-//         .toUpperCase();
-//
-//     // Limit to 2 characters
-//     if (initials.length > 2) {
-//       initials = initials.substring(0, 2);
-//     } else if (initials.isEmpty) {
-//       initials = 'EC'; // Default fallback
-//     }
-//
-//     return CircleAvatar(
-//       radius: 60,
-//       backgroundColor: Color(0xFF4D8D6E),
-//       child: Text(
-//         initials,
-//         style: TextStyle(
-//           color: Colors.white,
-//           fontSize: 42,
-//           fontWeight: FontWeight.bold,
-//         ),
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.grey[100],
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Column(
-//             children: [
-//               SizedBox(height: 20),
-//
-//               // Profile Section (Simple, no card elevation)
-//               Container(
-//                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-//                 child: Column(
-//                   children: [
-//                     // Centered profile picture
-//                     GestureDetector(
-//                       onTap: _showImageSourceDialog,
-//                       child: Stack(
-//                         children: [
-//                           _buildProfileImage(),
-//                           Positioned(
-//                             bottom: 0,
-//                             right: 0,
-//                             child: Container(
-//                               padding: EdgeInsets.all(6),
-//                               decoration: BoxDecoration(
-//                                 color: Color(0xFF4D8D6E),
-//                                 shape: BoxShape.circle,
-//                               ),
-//                               child: Icon(
-//                                 Icons.camera_alt,
-//                                 color: Colors.white,
-//                                 size: 20,
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//
-//                     SizedBox(height: 25),
-//
-//                     // User name and email
-//                     Text(
-//                       _userName,
-//                       style: TextStyle(
-//                         fontSize: 22,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                       textAlign: TextAlign.center,
-//                     ),
-//
-//                     SizedBox(height: 6),
-//
-//                     Text(
-//                       _userEmail,
-//                       style: TextStyle(
-//                         color: Colors.black54,
-//                         fontSize: 16,
-//                       ),
-//                       textAlign: TextAlign.center,
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//
-//               SizedBox(height: 20),
-//
-//               // Points Card
-//               Card(
-//                 margin: EdgeInsets.symmetric(horizontal: 20),
-//                 elevation: 4,
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(15),
-//                 ),
-//                 child: Container(
-//                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-//                   decoration: BoxDecoration(
-//                     color: Colors.white,
-//                     borderRadius: BorderRadius.circular(15),
-//                   ),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Row(
-//                         children: [
-//                           Container(
-//                             padding: EdgeInsets.all(8),
-//                             decoration: BoxDecoration(
-//                               color: Color(0xFF4D8D6E).withOpacity(0.2),
-//                               shape: BoxShape.circle,
-//                             ),
-//                             child: Icon(
-//                               Icons.stars,
-//                               color: Color(0xFF4D8D6E),
-//                               size: 20,
-//                             ),
-//                           ),
-//                           SizedBox(width: 12),
-//                           Text(
-//                             'Points',
-//                             style: TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       Text(
-//                         '1,000',
-//                         style: TextStyle(
-//                           fontSize: 18,
-//                           fontWeight: FontWeight.bold,
-//                           color: Color(0xFF4D8D6E),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//
-//               SizedBox(height: 20),
-//
-//               // Help & Support and Security & Privacy Card
-//               Card(
-//                 margin: EdgeInsets.symmetric(horizontal: 20),
-//                 elevation: 4,
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(15),
-//                 ),
-//                 child: Column(
-//                   children: [
-//                     // Help & Support
-//                     ListTile(
-//                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-//                       leading: Container(
-//                         padding: EdgeInsets.all(8),
-//                         decoration: BoxDecoration(
-//                           color: Color(0xFF4D8D6E).withOpacity(0.2),
-//                           shape: BoxShape.circle,
-//                         ),
-//                         child: Icon(
-//                           Icons.help_outline,
-//                           color: Color(0xFF4D8D6E),
-//                           size: 20,
-//                         ),
-//                       ),
-//                       title: Text(
-//                         'Help & Support',
-//                         style: TextStyle(
-//                           fontSize: 16,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                       trailing: Icon(Icons.arrow_forward_ios, size: 16),
-//                     ),
-//
-//                     // Divider
-//                     Divider(
-//                       color: Colors.grey[300],
-//                       height: 1,
-//                       thickness: 1,
-//                       indent: 20,
-//                       endIndent: 20,
-//                     ),
-//
-//                     // Security & Privacy
-//                     ListTile(
-//                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-//                       leading: Container(
-//                         padding: EdgeInsets.all(8),
-//                         decoration: BoxDecoration(
-//                           color: Color(0xFF4D8D6E).withOpacity(0.2),
-//                           shape: BoxShape.circle,
-//                         ),
-//                         child: Icon(
-//                           Icons.shield_outlined,
-//                           color: Color(0xFF4D8D6E),
-//                           size: 20,
-//                         ),
-//                       ),
-//                       title: Text(
-//                         'Security & Privacy',
-//                         style: TextStyle(
-//                           fontSize: 16,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                       trailing: Icon(Icons.arrow_forward_ios, size: 16),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//
-//               SizedBox(height: 20),
-//
-//               // Log out Card
-//               Card(
-//                 margin: EdgeInsets.symmetric(horizontal: 20),
-//                 elevation: 4,
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(15),
-//                 ),
-//                 child: GestureDetector(
-//                   onTap: () async {
-//                     // Sign out from Google if signed in
-//                     final GoogleSignIn googleSignIn = GoogleSignIn();
-//                     await googleSignIn.signOut();
-//
-//                     // Navigate to Signup Screen & Clear Navigation Stack
-//                     Navigator.pushAndRemoveUntil(
-//                       context,
-//                       MaterialPageRoute(builder: (context) => SignupScreen()),
-//                           (route) => false, // Clears navigation history
-//                     );
-//                   },
-//                   child: Container(
-//                     width: double.infinity,
-//                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-//                     decoration: BoxDecoration(
-//                       color: Colors.white,
-//                       borderRadius: BorderRadius.circular(15),
-//                     ),
-//                     child: Row(
-//                       children: [
-//                         Container(
-//                           padding: EdgeInsets.all(8),
-//                           decoration: BoxDecoration(
-//                             color: Colors.red.withOpacity(0.2),
-//                             shape: BoxShape.circle,
-//                           ),
-//                           child: Icon(
-//                             Icons.logout,
-//                             color: Colors.red,
-//                             size: 20,
-//                           ),
-//                         ),
-//                         SizedBox(width: 12),
-//                         Text(
-//                           'Log out',
-//                           style: TextStyle(
-//                             fontSize: 16,
-//                             fontWeight: FontWeight.bold,
-//                             color: Colors.red,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//
-//               SizedBox(height: 20),
-//             ],
-//           ),
-//         ),
-//       ),
-//
-//       bottomNavigationBar: BottomNavigationBar(
-//         currentIndex: _selectedIndex,
-//         onTap: (index) {
-//           setState(() {
-//             _selectedIndex = index;
-//           });
-//
-//           // Navigate to the appropriate screen based on the tapped item
-//           if (index == 0) {
-//             // Home icon
-//             Navigator.pushReplacementNamed(context, '/home');
-//           } else if (index == 1 || index == 3) {
-//             // Map or Profile icon
-//             // Already on Profile screen if index is 3
-//           } else if (index == 2) {
-//             // History icon
-//             Navigator.push(
-//               context,
-//               MaterialPageRoute(builder: (context) => const PastEventsPage()),
-//             );
-//           }
-//         },
-//         selectedItemColor: const Color(0xFF4D8D6E),
-//         unselectedItemColor: Colors.grey,
-//         type: BottomNavigationBarType.fixed,
-//         items: const [
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.home),
-//             label: 'Home',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.location_on),
-//             label: 'Map',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.history),
-//             label: 'History',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.person),
-//             label: 'Profile',
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-
-
+import 'package:eco/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -492,6 +8,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
+import 'recycling_center.dart';
+import 'under_process.dart'; // Import the UnderProcessPage
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -784,6 +302,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Navigate to UnderProcessPage
+  void _navigateToUnderProcess(String title) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UnderDevelopmentPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -855,62 +382,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               SizedBox(height: 20),
 
-              // Points Card
-// Points Card
-              Card(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
+              // Points Card - Added GestureDetector
+              GestureDetector(
+                onTap: () => _navigateToUnderProcess('Points'),
+                child: Card(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Color(0xFF4D8D6E).withOpacity(0.2),
-                              shape: BoxShape.circle,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Color(0xFF4D8D6E).withOpacity(0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                '⭐',
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
-                            child: Text(
-                              '⭐',
-                              style: TextStyle(fontSize: 20),
+                            SizedBox(width: 12),
+                            Text(
+                              'Points',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 12),
-                          Text(
-                            'Points',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '1,000',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4D8D6E),
+                          ],
                         ),
-                      ),
-                    ],
+                        Text(
+                          '1,000',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF4D8D6E),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
 
               SizedBox(height: 20),
 
-// Help & Support and Security & Privacy Card
+              // Help & Support and Security & Privacy Card
               Card(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 elevation: 4,
@@ -919,28 +448,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: Column(
                   children: [
-                    // Help & Support
-                    ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                      leading: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF4D8D6E).withOpacity(0.2),
-                          shape: BoxShape.circle,
+                    // Help & Support - Added GestureDetector
+                    GestureDetector(
+                      onTap: () => _navigateToUnderProcess('Help & Support'),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        leading: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Color(0xFF4D8D6E).withOpacity(0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            '❓',
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
-                        child: Text(
-                          '❓',
-                          style: TextStyle(fontSize: 20),
+                        title: Text(
+                          'Help & Support',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
+                        trailing: Icon(Icons.arrow_forward_ios, size: 16),
                       ),
-                      title: Text(
-                        'Help & Support',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      trailing: Icon(Icons.arrow_forward_ios, size: 16),
                     ),
 
                     // Divider
@@ -952,28 +484,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       endIndent: 20,
                     ),
 
-                    // Security & Privacy
-                    ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                      leading: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF4D8D6E).withOpacity(0.2),
-                          shape: BoxShape.circle,
+                    // Security & Privacy - Added GestureDetector
+                    GestureDetector(
+                      onTap: () => _navigateToUnderProcess('Security & Privacy'),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        leading: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Color(0xFF4D8D6E).withOpacity(0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            '🔒',
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
-                        child: Text(
-                          '🔒',
-                          style: TextStyle(fontSize: 20),
+                        title: Text(
+                          'Security & Privacy',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
+                        trailing: Icon(Icons.arrow_forward_ios, size: 16),
                       ),
-                      title: Text(
-                        'Security & Privacy',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      trailing: Icon(Icons.arrow_forward_ios, size: 16),
                     ),
                   ],
                 ),
@@ -1052,11 +587,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           // Navigate to the appropriate screen based on the tapped item
           if (index == 0) {
-            // Home icon
-            Navigator.pushReplacementNamed(context, '/home');
-          } else if (index == 1 || index == 3) {
-            // Map or Profile icon
-            // Already on Profile screen if index is 3
+            // Clear the stack and set home as the only route
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+                  (route) => false, // This removes all previous routes
+            );
+          } else if (index == 1 ) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const RecyclingHomePage()),
+            );
           } else if (index == 2) {
             // History icon
             Navigator.push(

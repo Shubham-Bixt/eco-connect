@@ -712,26 +712,7 @@ class _EcoConnectHomePageState extends State<EcoConnectHomePage> {
       if (events.isEmpty) {
         // If no events in database, use default events
         _events = [
-          Event(
-            id: '1',
-            title: 'Skrap Event @Juhu, Mumbai',
-            date: '1st September 2023',
-            imageUrl: 'assets/skrap_event.jpg',
-            location: 'Juhu Beach, Mumbai',
-            organizer: 'Eco-Connect Team',
-            creditPoints: '50',
-            status: 'Active',
-          ),
-          Event(
-            id: '2',
-            title: 'Clean India Show (CIS)',
-            date: '13th-15th September 2023',
-            imageUrl: 'assets/clean_india_show.png',
-            location: 'Mumbai Convention Center',
-            organizer: 'Government of India',
-            creditPoints: '100',
-            status: 'Active',
-          ),
+
         ];
 
         // Save default events to database
@@ -746,26 +727,7 @@ class _EcoConnectHomePageState extends State<EcoConnectHomePage> {
     } catch (e) {
       // Fallback to default events if database access fails
       _events = [
-        Event(
-          id: '1',
-          title: 'Skrap Event @Juhu, Mumbai',
-          date: '1st September 2023',
-          imageUrl: 'assets/skrap_event.jpg',
-          location: 'Juhu Beach, Mumbai',
-          organizer: 'Eco-Connect Team',
-          creditPoints: '50',
-          status: 'Active',
-        ),
-        Event(
-          id: '2',
-          title: 'Clean India Show (CIS)',
-          date: '13th-15th September 2023',
-          imageUrl: 'assets/clean_india_show.png',
-          location: 'Mumbai Convention Center',
-          organizer: 'Government of India',
-          creditPoints: '100',
-          status: 'Active',
-        ),
+
       ];
       _applyFilterAndSort();
     }

@@ -345,6 +345,7 @@ import 'database_helper.dart';
 import 'dart:io';
 import 'profile_screen.dart';
 import 'home_screen.dart';
+import 'recycling_center.dart';
 
 class PastEventsPage extends StatefulWidget {
   const PastEventsPage({Key? key}) : super(key: key);
@@ -444,23 +445,28 @@ class _PastEventsPageState extends State<PastEventsPage> {
           // Navigate to the appropriate screen based on the tapped item
           if (index == 0) {
             // Home icon
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => HomeScreen()),
-              // (Route<dynamic> route) => false,
+                  (route) => false, // This removes all previous routes
             );
-
-          } else if (index == 1 || index == 3) {
+          } else if (index == 1 ) {
             // Map or Profile icon
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProfileScreen()),
+              MaterialPageRoute(builder: (context) => RecyclingHomePage()),
             );
           } else if (index == 2) {
             // History icon
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const PastEventsPage()),
+            );
+          }
+          else if (index == 3 ) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileScreen()),
             );
           }
         },
@@ -696,26 +702,3 @@ class PastEventCard extends StatelessWidget {
     );
   }
 }
-
-// void main() {
-//   runApp(MaterialApp(
-//     title: 'Past Events Demo',
-//     home: const PastEventsPage(),
-//     debugShowCheckedModeBanner: false,
-//     theme: ThemeData(
-//       primarySwatch: Colors.green,
-//       scaffoldBackgroundColor: const Color(0xFFD0E8D0),
-//       appBarTheme: const AppBarTheme(
-//         backgroundColor: Color(0xFFD0E8D0),
-//         elevation: 0,
-//         centerTitle: true,
-//         iconTheme: IconThemeData(color: Colors.black87),
-//         titleTextStyle: TextStyle(
-//           color: Colors.black87,
-//           fontWeight: FontWeight.bold,
-//           fontSize: 22,
-//         ),
-//       ),
-//     ),
-//   ));
-// }
