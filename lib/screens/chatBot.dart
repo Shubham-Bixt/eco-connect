@@ -247,23 +247,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               ),
             ),
 
-          // Debug info
-          // if (_showDebugInfo && _debugInfo.isNotEmpty)
-          //   Container(
-          //     padding: const EdgeInsets.all(8),
-          //     color: Colors.grey[200],
-          //     width: double.infinity,
-          //     height: 100,
-          //     child: SingleChildScrollView(
-          //       child: Text(
-          //         'Debug Info:\n$_debugInfo',
-          //         style: const TextStyle(
-          //           fontFamily: 'monospace',
-          //           fontSize: 12,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
 
           // Redesigned input area with capsule shape
           Container(
