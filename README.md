@@ -34,11 +34,12 @@ India generates over **62 million tons** of waste annually, with a large portion
 ✅ **EcoAI Assistant** - 24/7 personalized sustainability guidance.  
 ✅ **Scalable & Adaptive** - Cloud-based architecture enables rapid expansion.  
 
-## 🏗️ Architecture  
-(assets/git/architecture.png)  
+## 🏗️ Architecture
+![Architecture](assets/git/architecture.png)
 
-## 📱 App Flow  
-(assets/git/app_pages.png)
+## 📱 App Flow
+![App Flow](assets/git/app_pages.png)
+
 
 ## 📸 MVP Snapshots  
 - Waste Classifier  
